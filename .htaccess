@@ -1,0 +1,7 @@
+# Activation du moteur de réécriture
+# pour la confirguration du server apache
+RewriteEngine On
+
+    # Si le dossier 'fw_exo' est chargé dans le navigateur,
+    # On redirige automatiquement l'utilisateur dans le dossier public
+    RewriteRule ^(.*)$ public/index.php

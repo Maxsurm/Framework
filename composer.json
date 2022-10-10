@@ -1,0 +1,25 @@
+{
+    "name": "cisco/fw_exo",
+    "description": "Création fw",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "maxsurm",
+            "email": "surmontmaxime@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "vlucas/phpdotenv": "5.4.x-dev",
+        "php-di/php-di": "dev-master",
+        "symfony/http-foundation": "6.2.x-dev"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "6.2.x-dev"
+    }
+}
