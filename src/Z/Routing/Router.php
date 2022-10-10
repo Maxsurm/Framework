@@ -38,21 +38,21 @@ use Symfony\Component\HttpFoundation\Request;
          * @param array $controllers
          * @return void
          */
-        public function sortRoutesByName(array $controllers): void
+        public function sortRoutesByName(array $controllers) : void
         {
             foreach ($controllers as $controller)
             {
                 $reflectionController = new \ReflectionClass($controller);
 
-                foreach ($reflectionController->getMethods() as $reflectionController) 
+                foreach ($reflectionController->getMethods() as $reflectionMethod) 
                 {
-                    $routesAttributes = $reflectionController->getAttributes(Route::class);
+                    $routesAttributes = $reflectionMethod->getAttributes(Route::class);
 
-                    foreach ($routesAttributes as $routesAttribute)
+                    foreach ($routesAttributes as $routesAttribute) 
                     {
                         $route = $routesAttribute->newInstance();
 
-                        $this->route[$route->getName()]= [
+                        $this->routes[$route->getName()] = [
                             'class'  => $reflectionMethod->class,
                             'method' => $reflectionMethod->name,
                             'route'  => $route

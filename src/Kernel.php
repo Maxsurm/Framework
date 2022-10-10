@@ -27,10 +27,17 @@ class Kernel implements HttpKernelInterface
     /**
      * Le conteneur de dependances
      *
-     * @var [type]
+     * @var ContainerInterface
      */
-    private $container;
-    public function __contruct(ContainerInterface $container)
+    private ContainerInterface $container;
+
+    /**
+     * A chaque fois qu'une nouvelle instance du noyau est créé : 
+     *      - On récupère le conteneur de dépendances
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -42,7 +49,7 @@ class Kernel implements HttpKernelInterface
      *
      * @return Response
      */
-    public function handleRequest() : Response
+    public function handleRequest(): Response
     {
         $router = $this->container->get(RouterInterface::class);
         $router_response = $router->run();
@@ -52,8 +59,7 @@ class Kernel implements HttpKernelInterface
 
     private function getControllerResponse($router_response)
     {
-        if (!is_array($router_response) && ($router_response === null) )
-        {
+        if (!is_array($router_response) && ($router_response === null)) {
             $controller_needed = $this->container->get('controller')['ErrorController'];
             $error_controller = new $controller_needed;
             $response = $error_controller->notFound();
@@ -63,10 +69,8 @@ class Kernel implements HttpKernelInterface
         $controller = $router_response['route']['class'];
         $method = $router_response['route']['method'];
 
-        if (is_array($router_response) && !empty($router_response))
-        {
-            if($router_response['parameters'])
-            {
+        if (is_array($router_response) && !empty($router_response)) {
+            if ($router_response['parameters']) {
                 $parameters = $router_response['parameters'];
                 return $this->container->call([$controller, $method], [$parameters]);
             }
