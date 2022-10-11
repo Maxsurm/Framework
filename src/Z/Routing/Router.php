@@ -88,6 +88,7 @@ use Symfony\Component\HttpFoundation\Request;
                     ];
                 }
             }
+            return null;
         }
 
         /**

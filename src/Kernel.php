@@ -32,6 +32,13 @@ class Kernel implements HttpKernelInterface
     private ContainerInterface $container;
 
     /**
+     * Cette propriété represente le noyau dans lui-meme
+     *
+     * @var [type]
+     */
+    private static $kernel;
+
+    /**
      * A chaque fois qu'une nouvelle instance du noyau est créé : 
      *      - On récupère le conteneur de dépendances
      *
@@ -39,6 +46,7 @@ class Kernel implements HttpKernelInterface
      */
     public function __construct(ContainerInterface $container)
     {
+        self::$kernel = $this;
         $this->container = $container;
     }
     /**
@@ -60,7 +68,7 @@ class Kernel implements HttpKernelInterface
     private function getControllerResponse($router_response)
     {
         if (!is_array($router_response) && ($router_response === null)) {
-            $controller_needed = $this->container->get('controller')['ErrorController'];
+            $controller_needed = $this->container->get('controllers')['ErrorController'];
             $error_controller = new $controller_needed;
             $response = $error_controller->notFound();
             return $response;
@@ -70,11 +78,21 @@ class Kernel implements HttpKernelInterface
         $method = $router_response['route']['method'];
 
         if (is_array($router_response) && !empty($router_response)) {
-            if ($router_response['parameters']) {
+            if (!empty ($router_response['parameters'])) {
                 $parameters = $router_response['parameters'];
                 return $this->container->call([$controller, $method], [$parameters]);
             }
             return $this->container->call([$controller, $method]);
         }
+    }
+
+    public static function getKernel()
+    {
+        return self::$kernel;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
